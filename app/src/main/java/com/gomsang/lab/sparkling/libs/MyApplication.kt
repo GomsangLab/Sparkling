@@ -1,7 +1,7 @@
-package com.gomsang.lab.sparkling
+package com.gomsang.lab.sparkling.libs
 
 import android.app.Application
-import com.gomsang.lab.sparkling.di.MyModule
+import com.gomsang.lab.sparkling.libs.di.MyModule
 import org.koin.android.ext.android.startKoin
 
 class MyApplication : Application() {

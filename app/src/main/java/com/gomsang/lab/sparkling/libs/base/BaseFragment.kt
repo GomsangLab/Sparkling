@@ -1,15 +1,19 @@
-package com.gomsang.lab.sparkling.base
+package com.gomsang.lab.sparkling.libs.base
 
-import android.graphics.Color
-import android.os.Build
+import android.content.Context
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.AppCompatActivity
+import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
+import androidx.fragment.app.Fragment
 import com.newidea.mcpestore.libs.base.BaseViewModel
 
-abstract class BaseActivity<T : ViewDataBinding, R : BaseViewModel> : AppCompatActivity() {
+abstract class BaseFragment<T : ViewDataBinding, R : BaseViewModel> : Fragment() {
+
+    private var activity: BaseActivity<*, *>? = null
+
     lateinit var viewDataBinding: T
 
     var progressView: View? = null
@@ -41,19 +45,33 @@ abstract class BaseActivity<T : ViewDataBinding, R : BaseViewModel> : AppCompatA
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            window.statusBarColor = Color.WHITE
-        }
-        viewDataBinding = DataBindingUtil.setContentView(this, layoutResourceId)
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        viewDataBinding = DataBindingUtil.inflate(inflater, layoutResourceId, container, false)
 
         initStartView()
         initDataBinding()
         initAfterBinding()
+        return viewDataBinding.root
+    }
+
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is BaseActivity<*, *>) {
+            activity = context
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        activity = null
     }
 
     fun setProgressVisible(visible : Boolean){
         progressView?.let {
+            it.isEnabled = visible
             it.visibility = if(visible) View.VISIBLE else View.INVISIBLE
         }
     }

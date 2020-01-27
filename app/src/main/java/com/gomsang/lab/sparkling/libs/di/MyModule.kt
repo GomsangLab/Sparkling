@@ -1,4 +1,4 @@
-package com.gomsang.lab.sparkling.di
+package com.gomsang.lab.sparkling.libs.di
 
 import com.gomsang.lab.sparkling.ui.main.MainViewModel
 import org.koin.androidx.viewmodel.ext.koin.viewModel
